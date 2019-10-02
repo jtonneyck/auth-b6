@@ -1,0 +1,8 @@
+{{#if user}}
+    <h1>Welcome {{user.firstname}} {{user.lastname}}</h1>
+    <a href="/auth/logout">Logout</a>
+    <a href="/users/profile">Profile</a>
+{{else}}
+    <a href="/auth/login">login</a>
+    <a href="/auth/signup">Sign up</a>
+{{/if}}
