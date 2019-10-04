@@ -7,16 +7,17 @@ var mongoose = require("mongoose");
 var session = require("express-session");
 var app = express();
 var hbs = require('hbs');
-
+require("dotenv").config();
 hbs.registerPartials(__dirname + '/views/partials');
 
 app.use(session({
   secret: 'keyboard cat',
   expires: {maxAge: 6000},
+  resave: true,
   saveUninitialized: true
 }))
 
-mongoose.connect("mongodb://localhost/auth-demo")
+mongoose.connect("mongodb://localhost/auth-demo",  { useUnifiedTopology: true , useNewUrlParser: true})
   .then(()=> {
     console.log("connected to mongodb");
   })
