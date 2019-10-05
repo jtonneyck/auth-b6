@@ -1,18 +1,15 @@
-<div id="login-form">
-    <input id="username" type="text" name="username" placeholder="username">
-    <input id="password" type="password" name="password" placeholder="password">
-    <button id="login-submit" type="submit">Submit</button>
-    <p id="validCredentials">Invalid credentials</p>
-    <p id="serverError">OOOOeps, try again later</p>
-    <a href="/auth/send-reset">Forgot password?</a>
+<div class="form-container">
+    <div class="form" id="login-form">
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" placeholder="username">
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" placeholder="password">
+        <button id="login-submit" type="submit">Login</button>
+        <p class="validCredentials">Invalid credentials</p>
+        <p class="serverError">OOOOeps, try again later</p>
+        <a href="/auth/send-reset">Forgot password?</a>
+    </div>
 </div>
-
-<style>
-    #validCredentials, #serverError {
-        display: none;
-        color: red;
-    }
-</style>
 
 <script>
 
@@ -20,8 +17,8 @@
         var username = document.getElementById("username")
         var password = document.getElementById("password")
         var loginSubmit = document.getElementById("login-submit")
-        var validCredentials = document.getElementById("validCredentials")
-        var serverError = document.getElementById("serverError")
+        var validCredentials = document.getElementsByClassName("validCredentials")[0]
+        var serverError = document.getElementsByClassName("serverError")[0]
 
         password.addEventListener("input", function() {
             validCredentials.style.display = "none"
@@ -31,7 +28,7 @@
             debugger
             axios({
                 method: "POST",
-                url: "http://localhost:3000/auth/login",
+                url: "{{{config.host}}}/auth/login",
                 data: {
                     username: username.value,
                     password: password.value
@@ -39,7 +36,7 @@
             })
             .then((response)=> {
                 serverError.style.display = "none"
-                if(response.data.loggedIn) location.href = "http://localhost:3000/users/profile"
+                if(response.data.loggedIn) location.href = "{{{config.host}}}/users/profile"
                 else { 
                     validCredentials.style.display = "block"
                 }

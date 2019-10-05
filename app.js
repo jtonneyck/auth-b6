@@ -10,6 +10,10 @@ var hbs = require('hbs');
 require("dotenv").config();
 hbs.registerPartials(__dirname + '/views/partials');
 
+app.locals.config = {
+  host: process.env.host
+}
+console.log(process.env.host)
 app.use(session({
   secret: 'keyboard cat',
   expires: {maxAge: 6000},
@@ -40,7 +44,7 @@ var usersRouter = require('./routes/users');
 var authRouter = require("./routes/auth");
 
 app.use("/users", (req,res,next)=> {
-  if(!req.session.user) res.send("Not logged in. Get lost!")
+  if(!req.session.user) res.redirect("/auth/login")
   else next()
 })
 

@@ -3,12 +3,12 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const transporter = require("../mailer/mailer");
+var createError = require('http-errors');
 var jwt = require('jsonwebtoken');
 
 router.post("/signup", (req,res)=> {
     User.findOne({$or: [{username: req.body.username, email: req.body.email}]})
         .then((user)=> {
-            debugger
             if(user) res.send("User with this email or username already exists")
             else {
                 bcrypt.hash(req.body.password, 10, function(err, hash) {
@@ -38,7 +38,6 @@ router.post("/signup", (req,res)=> {
                             })
                         })
                         .catch((err)=> {
-                            debugger
                             res.send(err.message)
                         })
                     }
@@ -48,11 +47,10 @@ router.post("/signup", (req,res)=> {
     })   
 
 router.get("/signup", (req,res)=> {
-    res.render("signup");
+    res.render("auth/signup");
 })
 
 router.post("/login", (req,res)=> {
-    debugger
     User.findOne({username: req.body.username})
         .then((user)=> {
             if(!user) res.json({loggedIn: false}) // this is different
@@ -73,12 +71,12 @@ router.post("/login", (req,res)=> {
 })
 
 router.get("/login", (req,res)=> {
-    res.render("login");
+    res.render("auth/login");
 })
 
 router.get("/logout", (req, res)=> {
     req.session.destroy();
-    res.send("logged out");
+    res.redirect("/");
 })
 
 router.post("/email-availability", (req,res)=> {
@@ -90,7 +88,7 @@ router.post("/email-availability", (req,res)=> {
 })
 
 router.get("/send-reset", (req,res)=> {
-    res.render("send-reset")
+    res.render("auth/send-reset")
 })
 
 router.post("/send-reset", (req,res)=> {
@@ -103,16 +101,16 @@ router.post("/send-reset", (req,res)=> {
             html: `<b>Password reset for crappy app: <a href="http://localhost:3000/auth/reset-password?token=${token}">Reset your password</a></b>` // html body
         })
         .then((result)=> {
-            res.send("email send")
+            res.send("Email send")
         })
         .catch((err)=> {
-            res.send("ERROR ERROR")
+            res.next(createError(400))
         })
     })
 })
 
 router.get("/reset-password", (req,res)=> {
-    res.render("reset-password", {token: req.query.token})
+    res.render("auth/reset-password", {token: req.query.token})
 })
 
 router.post("/reset-password", (req,res)=> {
@@ -129,7 +127,6 @@ router.post("/reset-password", (req,res)=> {
                     res.send(err)
                 })
             }
-
         })
     })
 })

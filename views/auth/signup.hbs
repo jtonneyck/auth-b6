@@ -1,58 +1,32 @@
 <div class="form-container">
-    <form action="/auth/signup" method="POST" id="form">
+    <form action="/auth/signup" method="POST" class="form">
+        <label for="username">Username</label>
         <input type="text" required name="username" placeholder="username">
+        <label for="email">Email</label>
         <input type="email" required id="email" name="email" placeholder="email">
+        <label for="firstname">Firstname</label>
         <input type="text" required name="firstname" placeholder="firstname">
+        <label for="lastname">Lastname</label>
         <input type="text" required name="lastname" placeholder="lastname">
-        <label for="mail">Password should be 8 characters, containing at least 1 number and a letter</label>
+        <label for="password">
+            <span>Password</span>
+            <span class="constraints">* 8 characters, at least 1 number and 1 letter</span>
+        </label>
         <input type="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" name="password" placeholder="password">
         <button type="submit">Sign up</button>
     </form>
 </div>
 
-
-<style>
-    .form-container {
-        width: 100%;
-        height: 80vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #form {
-        width: 500px;
-        height: 50%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    #form input {
-        margin: 5px 0;
-        border-radius: 5px;
-        height: 20px;
-        flex-shrink: 0;
-        
-    }
-    #form label {
-        font-size: 8px;
-    }
-    #form button {
-        height: 35px;
-        flex-shrink: 0;
-    }
-</style>
-
 <script>
     window.onload = function() {
         var email = document.getElementById("email");
-        var form = document.getElementById("form");
+        var form = document.getElementsByClassName("form")[0];
         debugger
         email.addEventListener("input", function (event) {
             debugger
             axios({
                 method: "POST",
-                url: "http://localhost:3000/auth/email-availability",
+                url: "{{{config.host}}}/auth/email-availability",
                 data: {
                     email: email.value
                 }
